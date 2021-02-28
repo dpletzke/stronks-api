@@ -1,7 +1,7 @@
 const controller = (db, ds) => {
   /**
    * get portfolio and cast shares into number
-   * @param {integer} userId
+   * @param {number} userId
    */
   const getPortfolioById = (userId) => {
     return db
@@ -19,7 +19,7 @@ const controller = (db, ds) => {
 
   /**
    * add and cast prices to portfolio
-   * @param {integer} userId
+   * @param {number} userId
    */
   const getPortfolioDataById = (userId) => {
     return getPortfolioById(userId).then(async (portfolio) => {
@@ -28,28 +28,47 @@ const controller = (db, ds) => {
       return tickers.reduce((acc, ticker) => {
         acc[ticker] = {
           ...portfolio[ticker],
-          price: Number(prices[ticker]),
+          price: prices[ticker],
         };
         return acc;
       }, {});
     });
   };
-  
+
   /**
    * pass through datastore function to route
    */
   const getStockPrices = ds.getStockPrices;
 
-  const tradeStock = (userId, ticker, newPosition) => {
-    return db
-      .select("cash")
-      .from("users")
-      .where({ id: userId })
-      .first()
+  /**
+   * change owned stock number of shares, after validating is valid trade
+   * will update existing row or insert new one, if it doesn't exist
+   * @param {number} userId
+   * @param {Object[]} newShares - list of newShares positions
+   * @param {number} trades[].user_id
+   * @param {number} trades[].stock_id
+   * @param {string} trades[].number_of_shares - new amount of shares the user owns
+   */
+  const updatePortfolio = (newShares) => {
+    console.log({ newShares });
+    return db("user_stocks")
+      .insert(newShares)
+      .onConflict(["user_id", "stock_id"])
+      .merge()
+      .returning([
+        "user_id as userId",
+        "stock_id as stockId",
+        "number_of_shares as numShares",
+      ])
       .then((result) => result);
   };
 
-  return { getPortfolioById, getPortfolioDataById, tradeStock, getStockPrices };
+  return {
+    getPortfolioById,
+    getPortfolioDataById,
+    updatePortfolio,
+    getStockPrices,
+  };
 };
 
 module.exports = controller;
