@@ -10,7 +10,7 @@ module.exports = (controller) => {
   const { login } = controller;
 
   router.get("/", (req, res, next) => {
-    res.render("index", { title: "Express" });
+    res.send({ message: "Success" });
   });
 
   router.post("/login", (req, res, next) => {
