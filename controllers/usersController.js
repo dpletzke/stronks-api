@@ -1,6 +1,5 @@
 const controller = (db) => {
   const getUsers = () => {
-    // console.log(db);
     return db.select("*").from("users");
   };
 
