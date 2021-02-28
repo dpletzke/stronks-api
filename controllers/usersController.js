@@ -28,7 +28,7 @@ const controller = (db) => {
       .from("users")
       .where({ id: userId })
       .first()
-      .then((result) => result);
+      .then((result) => Number(result.cash));
   };
 
   return { getUsers, getUserByEmail, getUserById, getCashById };
