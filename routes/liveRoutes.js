@@ -1,14 +1,20 @@
 const Router = require("express-promise-router");
 require("dotenv").config();
+var nodeCleanup = require('node-cleanup');
 
 const router = new Router();
 
-// const { ErrorHandler } = require("../helpers/errorsHelper");
+let timerList = [];
+
+nodeCleanup(() => {
+  timerList.forEach(t => {
+    clearInterval(t);
+  })
+});
 
 module.exports = (io, ds) => {
   const { getAllStockPrices } = ds;
 
-  let timerList = [];
   
   const timer = setInterval(() => {
     getAllStockPrices().then((stocks) => {
@@ -26,13 +32,9 @@ module.exports = (io, ds) => {
     socket.on("subscribe", (tickers) => {
       console.log("joining", tickers);
       socket.join(tickers);
-      console.log(socket.rooms);
     });
-  });
-
-  router.get("/", (req, res, next) => {
-    res.render("index", { title: "Live Page" });
   });
 
   return router;
 };
+
