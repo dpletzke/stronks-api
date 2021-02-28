@@ -15,7 +15,7 @@ stocks.forEach((val, key, map) => {
 });
 /**
  * 
- * @param {Object[]} tickers - array of ticker strings
+ * @param {string[]} tickers - array of ticker strings
  * @returns {Promise} resolves to prices
  * @returns {Object} prices
  * @returns {number} prices[ticker] - current price 
@@ -30,6 +30,16 @@ const getStockPrices = (tickers) => {
   });
 };
 
+/**
+ * @returns {Map} stockslist
+ * @returns {number} stockslist[ticker]
+ */
+const getAllStockPrices = () => {
+  return new Promise((res, rej) => {
+    res(stocks);
+  });
+};
+
 module.exports = {
-  getStockPrices,
+  getStockPrices, getAllStockPrices
 };

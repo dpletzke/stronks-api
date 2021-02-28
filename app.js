@@ -4,7 +4,13 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+const socketio = require("socket.io");
+
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+
+const io = socketio(server, { origins: '*:*', pingTimeout: 10000});
 
 const { errorMiddleware } = require("./middlewares/errorMiddleware");
 
@@ -19,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 const mountRoutes = require("./routes/indexRoutes");
-mountRoutes(app);
+mountRoutes(app, io);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -38,4 +44,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-module.exports = app;
+module.exports = { app, server };

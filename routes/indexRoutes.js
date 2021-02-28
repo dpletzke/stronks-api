@@ -18,8 +18,13 @@ const portfolios = require("./portfoliosRoutes")({
   ...stocksController
 });
 
-module.exports = (app) => {
+
+module.exports = (app, io) => {
+
+  const live = require("./liveRoutes")(io, ds);
+
   app.use("/", root);
   app.use("/users", authMiddleware, users);
   app.use("/portfolios", authMiddleware, portfolios);
+  app.use("/live", live);
 };
