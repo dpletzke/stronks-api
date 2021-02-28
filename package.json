@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "clear && NODE_ENV=development nodemon ./bin/www"
+    "dev": "clear && NODE_ENV=development nodemon ./bin/www",
+    "db:regen": "knex --knexfile db/knexfile.js migrate:rollback && knex --knexfile db/knexfile.js migrate:latest && knex --knexfile db/knexfile.js seed:run --debug"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
