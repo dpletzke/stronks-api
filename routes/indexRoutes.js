@@ -11,7 +11,10 @@ const portfoliosController = require("../controllers/portfoliosController")(
 
 const root = require("./rootRoutes")(rootController);
 const users = require("./usersRoutes")(usersController);
-const portfolios = require("./portfoliosRoutes")(portfoliosController);
+const portfolios = require("./portfoliosRoutes")({
+  ...portfoliosController,
+  ...usersController,
+});
 
 module.exports = (app) => {
   app.use("/", root);
