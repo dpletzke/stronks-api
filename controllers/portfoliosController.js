@@ -1,20 +1,38 @@
 const controller = (db, ds) => {
-  const getPortfoiloDataById = (userId) => {
+  const getPortfolioById = (userId) => {
     return db
       .select("ticker", "number_of_shares as numberOfShares")
       .from("user_stocks")
       .join("stocks", "stocks.id", "=", "stock_id")
       .where({ user_id: userId })
-      .then(async (result) => {
-        const prices = await ds.getStockPrices(
-          result.map(({ ticker }) => ticker)
-        );
-        console.log(prices);
-        return result.map((userStock) => {
-          return { ...userStock, price: prices[userStock.ticker] };
-        });
+      .then((result) => {
+        return result.reduce((acc, stock) => {
+          acc[stock.ticker] = stock;
+          return acc;
+        }, {});
       });
   };
+
+  /*
+   * get portfolio with prices
+   **/
+  const getPortfolioDataById = (userId) => {
+    return getPortfolioById(userId).then(async (portfolio) => {
+      const tickers = Object.keys(portfolio);
+      const prices = await ds.getStockPrices(tickers);
+      return tickers.reduce((acc, ticker) => {
+        acc[ticker] = {
+          ...portfolio[ticker],
+          price: prices[ticker],
+        };
+        return acc;
+      }, {});
+    });
+  };
+  /*
+  * pass through datastore function to route
+  */
+  const getStockPrices = ds.getStockPrices;
 
   const tradeStock = (userId, ticker, newPosition) => {
     return db
@@ -25,7 +43,7 @@ const controller = (db, ds) => {
       .then((result) => result);
   };
 
-  return { getPortfoiloDataById, tradeStock };
+  return { getPortfolioById, getPortfolioDataById, tradeStock, getStockPrices };
 };
 
 module.exports = controller;
