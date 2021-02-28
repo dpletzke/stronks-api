@@ -6,6 +6,9 @@ const router = new Router();
 
 let timerList = [];
 
+/**
+ * cleans up timers before node process in ended
+ */
 nodeCleanup(() => {
   timerList.forEach(t => {
     clearInterval(t);
@@ -21,10 +24,10 @@ module.exports = (io, ds) => {
     stocks.forEach((price, ticker) => {
         console.log("emitting ", price, " to ", ticker);
         io.in(ticker).emit("livePrices", { ticker, price });
-        timerList.push(timer);
       });
     });
   }, 1500);
+  timerList.push(timer);
 
   io.on("connection", (socket) => {
     socket.emit("Hello", "World");
