@@ -10,25 +10,27 @@ module.exports = (controller) => {
   const { getUserById, getCashById } = controller;
 
   router.get("/", (req, res) => {
-    const { userId } = req.query; 
+    const { userId } = req.query;
 
-    getUserById(userId).then((result) => {
-      res.json(result);
-    })
-    .catch(err => {
-      res.json(err);
-    })
+    getUserById(userId)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
   });
 
   router.get("/cash", (req, res) => {
-    const { userId } = req.query; 
+    const { userId } = req.query;
 
-    getCashById(userId).then((result) => {
-      res.json(result);
-    })
-    .catch(err => {
-      res.json(err);
-    })
+    getCashById(userId)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
   });
 
   return router;
