@@ -6,6 +6,8 @@ const logger = require("morgan");
 
 const app = express();
 
+const { errorMiddleware } = require("./middlewares/errorMiddleware");
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -23,6 +25,9 @@ mountRoutes(app);
 app.use((req, res, next) => {
   next(createError(404));
 });
+
+// Error middleware
+app.use(errorMiddleware);
 
 // error handler
 app.use((err, req, res, next) => {
