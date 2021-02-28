@@ -42,7 +42,7 @@ const controller = (db) => {
   const incrementCashById = (userId, cashChange) => {
     return db("users")
       .where({ id: userId })
-      .inrement("cash", cashChange)
+      .increment("cash", cashChange)
       .returning("cash")
       .then((result) => result[0]);
   };
