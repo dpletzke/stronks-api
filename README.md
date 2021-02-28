@@ -6,11 +6,26 @@ Basic API to provide paper stock trading of fake stocks and prices
   
 ### Setup
 0. Clone to local, run npm install
+1. create .env based on example, create database in local environment
 1. run  `npm run dev` at root
 2. Use Insomnia, Postman or some other routes tester on routes below
-3. run `node ./test/socketClient.js` at root for hardcoded live-price data
+3. run `node ./test/socketClient.js` at root for live-price data
 4. the client terminal logs the live price stream sent from server 
-## Usage
+
+## Stack
+
+Stronks Api is built with Postgres and Express, uses Knex for query building and Socket.io for live data 
+
+Highlights in the implementation:
+* portfolios routes and controller
+  * aync code allow for concurrency when validating trades 
+  * JSDoc documentation on important code 
+* user friendly error handling everywhere
+* user is authenticated for their data only 
+* in-memory stock data structure easy for an api and database to take its place
+  * using Map for stocks dataStore for faster read/write 
+
+## Routes
 login with a seeded user
 
 POST /login
@@ -122,6 +137,6 @@ and userId in query eg `http://localhost:3000/portfolios?userId=100`
 ```
 ```json
 //response
-467.23
+500.23
 ```
 ---
