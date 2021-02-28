@@ -186,7 +186,7 @@ module.exports = (controller) => {
         return Promise.all([upsertSharesReq, passData]);
       })
       .then(([upsertedShares, { cash, prices, stockIdsRef }]) => {
-        // format response data
+        // format and send response data
         const responseData = {
           updatedCashAmount: Number(cash),
           tradeConfirmation: trades.map((tr) => {
