@@ -21,10 +21,9 @@ const portfolios = require("./portfoliosRoutes")({
 
 module.exports = (app, io) => {
 
-  const live = require("./liveRoutes")(io, ds);
+  require("../live/connection")(io, ds);
 
   app.use("/", root);
   app.use("/users", authMiddleware, users);
   app.use("/portfolios", authMiddleware, portfolios);
-  app.use("/live", live);
 };

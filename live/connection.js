@@ -7,7 +7,7 @@ const router = new Router();
 let timerList = [];
 
 /**
- * cleans up timers before node process in ended
+ * cleans up timers before node process is ended
  */
 nodeCleanup(() => {
   timerList.forEach(t => {
@@ -19,10 +19,10 @@ module.exports = (io, ds) => {
   const { getAllStockPrices } = ds;
 
   
+  console.log("Emitting prices");
   const timer = setInterval(() => {
     getAllStockPrices().then((stocks) => {
     stocks.forEach((price, ticker) => {
-        console.log("emitting ", price, " to ", ticker);
         io.in(ticker).emit("livePrices", { ticker, price });
       });
     });
