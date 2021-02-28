@@ -7,7 +7,7 @@ const router = new Router();
 
 // export our router to be mounted by the parent application
 module.exports = (controller) => {
-  const { getUserById, getCashById } = controller;
+  const { getUserById, getCashById, updateCashById } = controller;
 
   router.get("/", (req, res) => {
     const { userId } = req.query;
@@ -27,6 +27,19 @@ module.exports = (controller) => {
     getCashById(userId)
       .then((result) => {
         res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.post("/cash", (req, res) => {
+    const { userId } = req.query;
+    const { cash } = req.body;
+
+    updateCashById(userId, cash)
+      .then((result) => {
+        res.json(Number(result));
       })
       .catch((err) => {
         res.json(err);
