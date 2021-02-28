@@ -43,7 +43,7 @@ POST /login
   "userId": // userId
 }
 ```
-for all other routes, include token in header as `token`
+### for all other routes, include token in header as `token`
 and userId in query eg `http://localhost:3000/portfolios?userId=100`
 
 ---
