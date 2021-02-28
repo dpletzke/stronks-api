@@ -30,7 +30,31 @@ const controller = (db) => {
       .then((result) => Number(result.cash));
   };
 
-  return { getUsers, getUserByEmail, getUserById, getCashById };
+  // can't use first() on update query
+  const updateCashById = (userId, newCash) => {
+    return db("users")
+      .where({ id: userId })
+      .update("cash", newCash)
+      .returning("cash")
+      .then((result) => result[0]);
+  };
+
+  const incrementCashById = (userId, cashChange) => {
+    return db("users")
+      .where({ id: userId })
+      .inrement("cash", cashChange)
+      .returning("cash")
+      .then((result) => result[0]);
+  };
+
+  return {
+    getUsers,
+    getUserByEmail,
+    getUserById,
+    getCashById,
+    updateCashById,
+    incrementCashById,
+  };
 };
 
 module.exports = controller;
