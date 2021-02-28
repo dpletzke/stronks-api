@@ -4,6 +4,7 @@ const { authMiddleware } = require("../middlewares/authMiddleware");
 
 const rootController = require("../controllers/rootController")(db);
 const usersController = require("../controllers/usersController")(db);
+const stocksController = require("../controllers/stocksController")(db, ds);
 const portfoliosController = require("../controllers/portfoliosController")(
   db,
   ds
@@ -14,6 +15,7 @@ const users = require("./usersRoutes")(usersController);
 const portfolios = require("./portfoliosRoutes")({
   ...portfoliosController,
   ...usersController,
+  ...stocksController
 });
 
 module.exports = (app) => {
